@@ -3,6 +3,7 @@ import api from '../api/axios';
 import { format, endOfMonth, parseISO, endOfDay, isValid, differenceInMonths, isAfter, addDays } from 'date-fns';
 import ClientSelect from '../components/ClientSelect';
 import { useLanguage } from '../context/LanguageContext';
+import { JOB_TITLE_TASKS } from '../constants/jobTasks';
 import logo from '../assets/logo.jpeg';
 
 const TaskReport = () => {
@@ -286,15 +287,22 @@ const TaskReport = () => {
 
         // التحقق مما إذا كانت المهمة الموجودة هي مهمة افتراضية (مكررة) لاستبدالها
         const jobTitleKey = normalizeText(emp.jobTitle);
-        let tasksData = normalizedJobTitleTasks[jobTitleKey];
         
-        // محاولة إيجاد تطابق جزئي لمعالجة الاختلافات الناتجة عن استيراد الإكسل
-        if (!tasksData) {
-            const possibleKey = Object.keys(normalizedJobTitleTasks).find(k => 
-                jobTitleKey.includes(k) || k.includes(jobTitleKey)
-            );
-            if (possibleKey) {
-                tasksData = normalizedJobTitleTasks[possibleKey];
+        // الأولوية للمهام المخصصة من الملف المحلي، ثم قاعدة البيانات
+        let tasksData = null;
+        const localKey = Object.keys(JOB_TITLE_TASKS).find(k => normalizeText(k) === jobTitleKey || normalizeText(k).includes(jobTitleKey) || jobTitleKey.includes(normalizeText(k)));
+        
+        if (localKey) {
+            tasksData = JOB_TITLE_TASKS[localKey];
+        } else {
+            tasksData = normalizedJobTitleTasks[jobTitleKey];
+            if (!tasksData) {
+                const possibleKey = Object.keys(normalizedJobTitleTasks).find(k => 
+                    jobTitleKey.includes(k) || k.includes(jobTitleKey)
+                );
+                if (possibleKey) {
+                    tasksData = normalizedJobTitleTasks[possibleKey];
+                }
             }
         }
         
