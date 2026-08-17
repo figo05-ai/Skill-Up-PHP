@@ -173,10 +173,11 @@ const EmployeePerformance = () => {
         }, 0);
         const totalWorkHours = totalMinutes / 60;
 
-        // 1. الساعات المخططة (حسب الرقم المدخل في ساعات العمل الشهرية للموظف)
+        // 1. الساعات المخططة (حسب الرقم المدخل في ساعات العمل الشهرية للموظف مضروبة في نسبة حضوره)
         // حساب عدد الأشهر بناءً على الفترة المختارة في التقرير بغض النظر عن تاريخ الالتحاق
         const monthsDiff = Math.max(differenceInMonths(parseISO(endDate), parseISO(startDate)) + 1, 1);
-        const plannedHours = (Number(emp.monthlyWorkHours) || 176) * monthsDiff;
+        const ratio = (Number(emp.attendancePercentage) || 100) / 100;
+        const plannedHours = (Number(emp.monthlyWorkHours) || 176) * monthsDiff * ratio;
 
         // 2 & 3. الساعات المنجزة = اجمالي ساعات العمل
         const deduction = (Number(emp.absentDays) || 0) * 8;
