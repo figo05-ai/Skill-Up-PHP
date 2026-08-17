@@ -993,6 +993,10 @@ const CompanyDetails = () => {
                 <input type="number" name="holidays" value={formData.holidays} onChange={handleFormChange} className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500/20 outline-none" />
               </div>
               <div>
+                <label className="block text-sm font-medium mb-1 text-gray-700">{t('attendancePercentage')}</label>
+                <input type="number" name="attendancePercentage" value={formData.attendancePercentage} onChange={handleFormChange} min="0" max="100" className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500/20 outline-none" />
+              </div>
+              <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700">{t('monthlyWorkHours')}</label>
                 <input type="number" name="monthlyWorkHours" value={formData.monthlyWorkHours} onChange={handleFormChange} className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500/20 outline-none" />
               </div>
