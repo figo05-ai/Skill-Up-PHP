@@ -90,15 +90,20 @@ class AttendanceController extends Controller
                     ->exists();
 
                 if (!$exists) {
-                    // Random check in between 09:00 and 09:59
+                    $user = \App\Models\User::find($userId);
+                    $ratio = ($user && $user->attendance_percentage) ? ($user->attendance_percentage / 100.0) : 1.0;
+                    
+                    // Random check in between 09:00 and 09:15
                     $checkInHour = 9;
-                    $checkInMinute = rand(0, 59);
+                    $checkInMinute = rand(0, 15);
                     $checkIn = $current->copy()->setTime($checkInHour, $checkInMinute, 0);
 
-                    // Random check out between 16:00 and 16:59
-                    $checkOutHour = 16;
-                    $checkOutMinute = rand(0, 59);
-                    $checkOut = $current->copy()->setTime($checkOutHour, $checkOutMinute, 0);
+                    // Standard full day is 8 hours
+                    $workDurationMinutes = (8 * 60) * $ratio;
+                    
+                    // Add some randomness (±5 minutes)
+                    $actualDurationMinutes = $workDurationMinutes + rand(-5, 5);
+                    $checkOut = $checkIn->copy()->addMinutes($actualDurationMinutes);
 
                     // Work hours diff
                     $workHours = $checkIn->diffInMinutes($checkOut) / 60;
