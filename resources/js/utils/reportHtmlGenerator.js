@@ -6,6 +6,8 @@ const formatHours = (decimalHours) => {
   return `${hrs}:${mins < 10 ? '0' : ''}${mins}`;
 };
 
+import { JOB_TITLE_TASKS } from '../constants/jobTasks';
+
 const normalizeText = (text) => text ? text.replace(/[\u064B-\u065F]/g, '').trim().toLowerCase() : '';
 
 // Function to generate an array of HTML strings to avoid huge canvas limits
@@ -65,16 +67,31 @@ export const generateReportHtmlArray = (reportType, client, employees, allTasks,
       });
 
       const jobTitleKey = normalizeText(emp.jobTitle);
-      let tasksData = normalizedJobTitleTasks[jobTitleKey];
+      
+      // Merge JOB_TITLE_TASKS into the lookup logic to ensure we use specific tasks if available
+      let localNormalized = { ...normalizedJobTitleTasks };
+      for (const key in JOB_TITLE_TASKS) {
+          localNormalized[normalizeText(key)] = JOB_TITLE_TASKS[key];
+      }
+
+      let tasksData = localNormalized[jobTitleKey];
       if (!tasksData) {
-          const possibleKey = Object.keys(normalizedJobTitleTasks).find(k => jobTitleKey.includes(k) || k.includes(jobTitleKey));
-          if (possibleKey) tasksData = normalizedJobTitleTasks[possibleKey];
+          const possibleKey = Object.keys(localNormalized).find(k => jobTitleKey.includes(k) || k.includes(jobTitleKey));
+          if (possibleKey) tasksData = localNormalized[possibleKey];
       }
       
       let shouldGenerate = tasks.length === 0;
       if (tasks.length === 1 && tasksData) {
-           const tTitle = String(tasks[0].title).trim();
-           if (Array.isArray(tasksData) ? tasksData.some(t => String(t).trim() === tTitle) : String(tasksData).trim() === tTitle) {
+           const cleanString = (str) => normalizeText(String(str)).replace(/[\s\u200B-\u200D\uFEFF]/g, '');
+           const tTitle = cleanString(tasks[0].title);
+           const isMatch = Array.isArray(tasksData) 
+              ? tasksData.some(t => {
+                  const nt = cleanString(t);
+                  return nt === tTitle || nt.includes(tTitle) || tTitle.includes(nt);
+              }) 
+              : cleanString(tasksData) === tTitle;
+              
+           if (isMatch) {
                shouldGenerate = true;
            }
       }

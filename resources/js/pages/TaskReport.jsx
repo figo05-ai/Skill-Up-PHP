@@ -310,13 +310,14 @@ const TaskReport = () => {
         
         // إذا وجدت مهمة واحدة فقط، وتطابق اسمها إحدى المهام الافتراضية، قم بتفعيل التوليد العشوائي للتنوع
         if (empTasks.length === 1 && tasksData) {
-             const tTitle = normalizeText(String(empTasks[0].title));
+             const cleanString = (str) => normalizeText(String(str)).replace(/[\s\u200B-\u200D\uFEFF]/g, '');
+             const tTitle = cleanString(empTasks[0].title);
              const isMatch = Array.isArray(tasksData) 
                 ? tasksData.some(t => {
-                    const nt = normalizeText(String(t));
+                    const nt = cleanString(t);
                     return nt === tTitle || nt.includes(tTitle) || tTitle.includes(nt);
                 }) 
-                : normalizeText(String(tasksData)) === tTitle;
+                : cleanString(tasksData) === tTitle;
                 
              if (isMatch) {
                  shouldGenerate = true;
