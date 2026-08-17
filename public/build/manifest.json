@@ -1,0 +1,18 @@
+{
+  "resources/js/assets/logo.jpeg": {
+    "file": "assets/logo-CvjMyWMW.jpeg",
+    "src": "resources/js/assets/logo.jpeg"
+  },
+  "resources/js/main.jsx": {
+    "file": "assets/main-C2FX_bo8.js",
+    "name": "main",
+    "src": "resources/js/main.jsx",
+    "isEntry": true,
+    "css": [
+      "assets/main-P-wX-Iq_.css"
+    ],
+    "assets": [
+      "assets/logo-CvjMyWMW.jpeg"
+    ]
+  }
+}
