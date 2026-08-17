@@ -1,59 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Skill-Up HRMS 🏢
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Skill-Up HRMS](https://img.shields.io/badge/Version-1.0.0-blue)
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=flat&logo=laravel&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 
-## About Laravel
+نظام إدارة موارد بشرية متكامل (HR Management System) مبني بأحدث التقنيات لخدمة مؤسسة **Skill-Up**. يهدف النظام إلى تسهيل إدارة الموظفين، الحضور والانصراف، العملاء، والمهام اليومية بطريقة سلسة واحترافية.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 المميزات الأساسية (Core Features)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **إدارة الموظفين (Employees Management):**
+   - إضافة، تعديل، وحذف بيانات الموظفين (مع دعم بيانات مفصلة كالمسمى الوظيفي، ساعات العمل، وتاريخ التعيين).
+   - عرض ملف شخصي متكامل لكل موظف.
+2. **الحضور والانصراف (Attendance Tracking):**
+   - تسجيل ساعات حضور وانصراف الموظفين.
+   - تقارير مخصصة لحالة الحضور وساعات العمل وتتبع الأداء.
+3. **إدارة المهام (Task Management):**
+   - إسناد المهام للموظفين وتتبع نسبة الإنجاز (Progress).
+   - لوحة مهام (Task Board) تفاعلية لمتابعة حالات المهام (قيد الانتظار، جارية، مكتملة).
+4. **إدارة العملاء (Clients Management):**
+   - قاعدة بيانات مخصصة لعملاء الشركة، وأرقام السجلات التجارية، وملفات التواصل.
+5. **التقارير والإحصائيات (Reporting & Analytics):**
+   - لوحة تحكم ذكية (Dashboard) تعرض نظرة عامة على أداء الشركة.
+   - تصدير تقارير المهام والحضور بشكل احترافي.
+6. **سجل النظام (System Logs):**
+   - تتبع كامل لكافة الإجراءات التي تتم على النظام لضمان الحماية والشفافية.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ التقنيات المستخدمة (Tech Stack)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Backend (الخادم)
+- **Framework:** Laravel (PHP)
+- **Database:** MySQL
+- **Authentication:** Laravel Sanctum (Token-based Auth)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Frontend (الواجهة الأمامية)
+- **Library:** React.js (18+)
+- **Styling:** Tailwind CSS
+- **Routing:** React Router DOM
+- **State/API:** Axios & Context API
+- **Build Tool:** Vite
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🚀 كيفية تشغيل المشروع محلياً (Local Setup)
 
+### 1. المتطلبات الأساسية
+- تثبيت PHP (8.1 أو أحدث)
+- تثبيت Composer
+- تثبيت Node.js & npm
+- تثبيت MySQL Database
+
+### 2. خطوات التثبيت
 ```bash
-composer require laravel/boost --dev
+# 1. نسخ المستودع
+git clone https://github.com/figo05-ai/Skill-Up-PHP.git
+cd Skill-Up-PHP
 
-php artisan boost:install
+# 2. تثبيت حزم الخادم
+composer install
+
+# 3. تثبيت حزم الواجهة الأمامية
+npm install
+
+# 4. إعداد ملف البيئة
+cp .env.example .env
+# قم بتعديل بيانات قاعدة البيانات في ملف .env
+
+# 5. تجهيز النظام
+php artisan key:generate
+php artisan migrate
+php artisan storage:link
+
+# 6. تشغيل الخادم
+php artisan serve
+
+# 7. تشغيل الواجهة الأمامية في نافذة Terminal أخرى
+npm run dev
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🌍 رفع المشروع على الاستضافة (Deployment)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. اسحب المشروع على الاستضافة الخاصة بك (مثل Hostinger).
+2. قم بتحديث ملف الـ `.env` بإعدادات الإنتاج:
+   ```env
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_URL=https://yourdomain.com
+   ```
+3. قم بتشغيل الأوامر التالية من خلال الـ SSH:
+   ```bash
+   composer install --optimize-autoloader --no-dev
+   npm run build
+   php artisan storage:link
+   php artisan optimize
+   ```
+4. تأكد من ضبط مسار الدومين (Document Root) إلى المجلد `public`.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🔐 حسابات الإدارة الافتراضية
+يرجى الرجوع لمسؤول النظام للحصول على بيانات الاعتماد الخاصة بمدير النظام (Admin Credentials).
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# Skill-Up-PHP
+---
+*تم التطوير بكل ❤️ لصالح مؤسسة Skill-Up.*
