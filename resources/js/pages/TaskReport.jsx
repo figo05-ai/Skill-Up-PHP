@@ -226,7 +226,18 @@ const TaskReport = () => {
         currentStart = addDays(chunkEnd, 1);
       }
 
+
       const employeesData = [];
+      
+      // Calculate a stable rank for each employee within their job title for the entire company
+      const allCompanyEmployees = [...employees].sort((a, b) => String(a.id || a._id).localeCompare(String(b.id || b._id)));
+      const jobTitleRanks = {};
+      allCompanyEmployees.forEach(e => {
+        const titleKey = normalizeText(e.jobTitle);
+        if (!jobTitleRanks[titleKey]) jobTitleRanks[titleKey] = [];
+        jobTitleRanks[titleKey].push(String(e.id || e._id));
+      });
+
       for (const [empIndex, id] of stableIdsToPrint.entries()) {
         const emp = employees.find(e => String(e.id || e._id) === String(id));
         
@@ -307,50 +318,17 @@ const TaskReport = () => {
                 const startMonthVal = sY * 12 + (sM - 1);
                 const endMonthVal = eY * 12 + (eM - 1);
 
-                const cyrb53 = (str, seed = 0) => {
-                    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-                    for (let i = 0, ch; i < str.length; i++) {
-                        ch = str.charCodeAt(i);
-                        h1 = Math.imul(h1 ^ ch, 2654435761);
-                        h2 = Math.imul(h2 ^ ch, 1597334677);
-                    }
-                    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-                    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-                    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
-                };
-
-                const mulberry32 = (a) => {
-                    return () => {
-                        let t = a += 0x6D2B79F5;
-                        t = Math.imul(t ^ t >>> 15, t | 1);
-                        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-                        return ((t ^ t >>> 14) >>> 0) / 4294967296;
-                    }
-                };
-
-                const yearlyShuffledTasks = {};
+                // استخراج الترتيب الثابت للموظف داخل مسماه الوظيفي لضمان توزيع المهام باختلافها
+                const stableEmpIndex = jobTitleRanks[jobTitleKey] ? jobTitleRanks[jobTitleKey].indexOf(String(emp.id || emp._id)) : 0;
+                const finalEmpIndex = Math.max(0, stableEmpIndex);
 
                 for (let m = startMonthVal; m <= endMonthVal; m++) {
                     const currentYear = Math.floor(m / 12);
                     const currentMonthIdx = m % 12;
                     const taskDate = new Date(currentYear, currentMonthIdx, 1);
 
-                    if (!yearlyShuffledTasks[currentYear]) {
-                        const seedString = `${jobTitleKey}_${currentYear}_v16`;
-                        const seed = cyrb53(seedString);
-                        const rand = mulberry32(seed);
-
-                        let indices = Array.from({ length: tasksData.length }, (_, k) => k);
-                        for (let i = indices.length - 1; i > 0; i--) {
-                            const j = Math.floor(rand() * (i + 1));
-                            [indices[i], indices[j]] = [indices[j], indices[i]];
-                        }
-                        yearlyShuffledTasks[currentYear] = indices.map(i => tasksData[i]);
-                    }
-
-                    const yearTasks = yearlyShuffledTasks[currentYear];
-                    const taskIndex = (currentMonthIdx + empIndex) % yearTasks.length;
-                    const taskDesc = yearTasks[taskIndex];
+                    const taskIndex = (currentMonthIdx + finalEmpIndex) % tasksData.length;
+                    const taskDesc = tasksData[taskIndex];
                     
                     if (taskDesc) {
                         empTasks.push({
