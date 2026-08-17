@@ -307,10 +307,18 @@ const TaskReport = () => {
         }
         
         let shouldGenerate = empTasks.length === 0;
+        
         // إذا وجدت مهمة واحدة فقط، وتطابق اسمها إحدى المهام الافتراضية، قم بتفعيل التوليد العشوائي للتنوع
         if (empTasks.length === 1 && tasksData) {
-             const tTitle = String(empTasks[0].title).trim();
-             if (Array.isArray(tasksData) ? tasksData.some(t => String(t).trim() === tTitle) : String(tasksData).trim() === tTitle) {
+             const tTitle = normalizeText(String(empTasks[0].title));
+             const isMatch = Array.isArray(tasksData) 
+                ? tasksData.some(t => {
+                    const nt = normalizeText(String(t));
+                    return nt === tTitle || nt.includes(tTitle) || tTitle.includes(nt);
+                }) 
+                : normalizeText(String(tasksData)) === tTitle;
+                
+             if (isMatch) {
                  shouldGenerate = true;
              }
         }
