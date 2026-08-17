@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
-
-
+import ClientSelect from "../components/ClientSelect";
 
 const DevTools = () => {
   const { user } = useAuth();
@@ -457,12 +456,8 @@ const DevTools = () => {
             <form onSubmit={handleSeed} className="flex flex-wrap gap-4 items-end bg-gray-50 p-5 rounded-xl border border-gray-200">
               <div className="flex-1 min-w-[200px]">
                 <label className="block text-xs font-bold text-gray-700 mb-1">الشركة المستهدفة</label>
-                <select value={seedClientId} onChange={(e) => setSeedClientId(e.target.value)} className="border border-gray-300 w-full p-2.5 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none">
-                  <option value="">جميع الشركات (خطر)</option>
-                  {clients.map((c) => (
-                    <option key={c.id || c._id} value={c.id || c._id}>{c.name}</option>
-                  ))}
-                </select>
+                <ClientSelect value={seedClientId} onChange={setSeedClientId} hideLabel noMargin />
+                {!seedClientId && <div className="text-red-500 text-[10px] mt-1 font-bold">جميع الشركات (خطر) - لم يتم اختيار شركة</div>}
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">تاريخ البداية</label>
