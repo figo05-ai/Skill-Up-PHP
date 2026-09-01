@@ -655,7 +655,7 @@ const CompanyDetails = () => {
       [t('jobTitle')]: emp.jobTitle,
       [t('identity')]: emp.identityNumber,
       [t('phone')]: emp.phone,
-      [t('joiningDate')]: emp.joiningDate ? format(new Date(emp.joiningDate), 'yyyy-MM-dd') : '',
+      [t('joiningDate')]: emp.joiningDate && !isNaN(new Date(emp.joiningDate)) ? format(new Date(emp.joiningDate), 'yyyy-MM-dd') : '',
       [t('status')]: t(emp.status) || emp.status,
       [t('email')]: emp.email
     }));
@@ -891,7 +891,7 @@ const CompanyDetails = () => {
                   <td className="p-4 border-r border-gray-50 text-gray-600 font-mono text-sm">{emp.identityNumber || '-'}</td>
                   <td className="p-4 border-r border-gray-50 text-gray-600" dir="ltr">{emp.phone || '-'}</td>
                   <td className="p-4 border-r border-gray-50 text-gray-600">
-                    {emp.joiningDate ? format(new Date(emp.joiningDate), 'dd/MM/yyyy') : '-'}
+                    {emp.joiningDate && !isNaN(new Date(emp.joiningDate)) ? format(new Date(emp.joiningDate), 'dd/MM/yyyy') : '-'}
                   </td>
                   <td className="p-4 text-center">
                     <span className={`px-2 py-1 rounded text-xs font-bold ${

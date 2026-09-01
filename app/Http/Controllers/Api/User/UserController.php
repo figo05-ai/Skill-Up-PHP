@@ -53,8 +53,14 @@ class UserController extends Controller
                 $validated[$field] = '';
             }
         }
-        $user = $this->userService->createUser($validated);
-        return $this->successResponse(new UserResource($user), 'User created successfully.', 201);
+        try {
+            $user = $this->userService->createUser($validated);
+            return $this->successResponse(new UserResource($user), 'User created successfully.', 201);
+        } catch (\Exception $e) {
+            $msg = $this->getFriendlyErrorMessage($e);
+            $status = str_contains($msg, 'حدث خطأ') ? 500 : 400;
+            return $this->errorResponse($msg, $status);
+        }
     }
 
     public function bulk(\Illuminate\Http\Request $request)
@@ -72,6 +78,11 @@ class UserController extends Controller
                 if (empty($empData['email'])) {
                     $empData['email'] = 'emp_' . uniqid() . '@example.com';
                 }
+                // set default password if missing to avoid database exception
+                if (empty($empData['password'])) {
+                    $empData['password'] = \Illuminate\Support\Facades\Hash::make('123456');
+                }
+                
                 foreach ($stringFields as $field) {
                     if (!isset($empData[$field]) || $empData[$field] === null) {
                         $empData[$field] = '';
@@ -80,8 +91,9 @@ class UserController extends Controller
                 $this->userService->createUser($empData);
                 $successCount++;
             } catch (\Exception $e) {
-                $name = $empData['name'] ?? 'Unknown';
-                $errors[] = "Error adding $name: " . $e->getMessage();
+                $name = $empData['name'] ?? 'موظف غير معروف';
+                $errorMessage = $this->getFriendlyErrorMessage($e);
+                $errors[] = "خطأ في إضافة ($name): " . $errorMessage;
             }
         }
 
@@ -101,13 +113,19 @@ class UserController extends Controller
                 $validated[$field] = '';
             }
         }
-        $user = $this->userService->updateUser($id, $validated);
+        try {
+            $user = $this->userService->updateUser($id, $validated);
 
-        if (!$user) {
-            return $this->errorResponse('User not found.', 404);
+            if (!$user) {
+                return $this->errorResponse('User not found.', 404);
+            }
+
+            return $this->successResponse(new UserResource($user), 'User updated successfully.');
+        } catch (\Exception $e) {
+            $msg = $this->getFriendlyErrorMessage($e);
+            $status = str_contains($msg, 'حدث خطأ') ? 500 : 400;
+            return $this->errorResponse($msg, $status);
         }
-
-        return $this->successResponse(new UserResource($user), 'User updated successfully.');
     }
 
     public function destroy($id)
@@ -119,5 +137,26 @@ class UserController extends Controller
         }
 
         return $this->successResponse(null, 'User deleted successfully.');
+    }
+
+    private function getFriendlyErrorMessage(\Exception $e): string
+    {
+        $message = $e->getMessage();
+        
+        if (str_contains($message, '1062 Duplicate entry')) {
+            return "البريد الإلكتروني أو رقم الهوية موجود مسبقاً.";
+        } elseif (str_contains($message, 'default value') || str_contains($message, 'cannot be null')) {
+            return "هناك حقل إلزامي مفقود في البيانات.";
+        } elseif (str_contains($message, 'Data too long')) {
+            return "بعض البيانات المدخلة طويلة جداً وتتجاوز الحد المسموح به.";
+        } elseif (str_contains($message, 'foreign key constraint fails') || str_contains($message, 'Cannot add or update a child row')) {
+            return "توجد مشكلة في البيانات المرتبطة (مثل القسم أو الجهة).";
+        } elseif (str_contains($message, 'Incorrect date value')) {
+            return "صيغة التاريخ المدخلة غير صحيحة.";
+        } elseif (str_contains($message, 'Incorrect integer value') || str_contains($message, 'Numeric value out of range')) {
+            return "قيمة رقمية غير صحيحة في أحد الحقول.";
+        }
+        
+        return "حدث خطأ غير متوقع، يرجى مراجعة البيانات المدخلة.";
     }
 }

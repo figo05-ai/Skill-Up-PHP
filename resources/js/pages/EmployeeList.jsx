@@ -242,6 +242,8 @@ const EmployeeList = () => {
   const [importData, setImportData] = useState([]);
   const [importResults, setImportResults] = useState(null);
   const [showJobTitleList, setShowJobTitleList] = useState(false);
+  const [showCompanyList, setShowCompanyList] = useState(false);
+  const [companyInput, setCompanyInput] = useState('');
   const [alertModal, setAlertModal] = useState({ show: false, message: '', type: 'error' });
   const [clientSearch, setClientSearch] = useState('');
   const [isPrinting, setIsPrinting] = useState(false);
@@ -259,6 +261,15 @@ const EmployeeList = () => {
       return () => clearTimeout(timer);
     }
   }, [alertModal.show, alertModal.type]);
+
+  useEffect(() => {
+    if (!form.client) {
+      setCompanyInput('');
+    } else {
+      const c = clients.find(client => String(client.id || client._id) === String(form.client));
+      if (c) setCompanyInput(c.name);
+    }
+  }, [form.client, clients]);
 
   const fetchEmployees = async () => {
     try {
@@ -783,12 +794,40 @@ const EmployeeList = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5 text-gray-700">{t('company')}</label>
-              <select name="client" value={form.client} onChange={handleChange} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none">
-                <option value="">{t('selectClientFirst')}</option>
-                {clients.map(c => (
-                  <option key={c.id || c._id} value={c.id || c._id}>{c.name}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <input 
+                  type="text"
+                  value={companyInput}
+                  onChange={(e) => {
+                    setCompanyInput(e.target.value);
+                    if (form.client) setForm(prev => ({ ...prev, client: '' }));
+                  }}
+                  onFocus={() => setShowCompanyList(true)}
+                  onBlur={() => setTimeout(() => setShowCompanyList(false), 200)}
+                  placeholder={t('selectClientFirst')}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none"
+                  autoComplete="off"
+                />
+                {showCompanyList && (
+                  <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto shadow-lg">
+                    {clients.filter(c => c.name.toLowerCase().includes(companyInput.toLowerCase())).map(c => (
+                      <li 
+                        key={c.id || c._id} 
+                        className="p-2 hover:bg-gray-100 cursor-pointer text-sm" 
+                        onMouseDown={() => { 
+                          setForm(prev => ({ ...prev, client: c.id || c._id })); 
+                          setShowCompanyList(false); 
+                        }}
+                      >
+                        {c.name}
+                      </li>
+                    ))}
+                    {clients.filter(c => c.name.toLowerCase().includes(companyInput.toLowerCase())).length === 0 && (
+                      <li className="p-2 text-gray-500 text-sm text-center">لا توجد نتائج</li>
+                    )}
+                  </ul>
+                )}
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5 text-gray-700">{t('status')}</label>

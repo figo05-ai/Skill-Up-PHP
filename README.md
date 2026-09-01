@@ -5,39 +5,39 @@
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 
-نظام إدارة موارد بشرية متكامل (HR Management System) مبني بأحدث التقنيات لخدمة مؤسسة **Skill-Up**. يهدف النظام إلى تسهيل إدارة الموظفين، الحضور والانصراف، العملاء، والمهام اليومية بطريقة سلسة واحترافية.
+A comprehensive Human Resources Management System built with the latest technologies to serve the **Skill-Up** organization. The system aims to facilitate the management of employees, attendance, clients, and daily tasks in a seamless and professional manner.
 
 ---
 
-## 🌟 المميزات الأساسية (Core Features)
+## 🌟 Core Features
 
-1. **إدارة الموظفين (Employees Management):**
-   - إضافة، تعديل، وحذف بيانات الموظفين (مع دعم بيانات مفصلة كالمسمى الوظيفي، ساعات العمل، وتاريخ التعيين).
-   - عرض ملف شخصي متكامل لكل موظف.
-2. **الحضور والانصراف (Attendance Tracking):**
-   - تسجيل ساعات حضور وانصراف الموظفين.
-   - تقارير مخصصة لحالة الحضور وساعات العمل وتتبع الأداء.
-3. **إدارة المهام (Task Management):**
-   - إسناد المهام للموظفين وتتبع نسبة الإنجاز (Progress).
-   - لوحة مهام (Task Board) تفاعلية لمتابعة حالات المهام (قيد الانتظار، جارية، مكتملة).
-4. **إدارة العملاء (Clients Management):**
-   - قاعدة بيانات مخصصة لعملاء الشركة، وأرقام السجلات التجارية، وملفات التواصل.
-5. **التقارير والإحصائيات (Reporting & Analytics):**
-   - لوحة تحكم ذكية (Dashboard) تعرض نظرة عامة على أداء الشركة.
-   - تصدير تقارير المهام والحضور بشكل احترافي.
-6. **سجل النظام (System Logs):**
-   - تتبع كامل لكافة الإجراءات التي تتم على النظام لضمان الحماية والشفافية.
+1. **Employees Management:**
+   - Add, edit, and delete employee records (supporting detailed data such as job titles, working hours, and hiring dates).
+   - View a comprehensive profile for each employee.
+2. **Attendance Tracking:**
+   - Record employees' clock-in and clock-out times.
+   - Customized reports for attendance status, working hours, and performance tracking.
+3. **Task Management:**
+   - Assign tasks to employees and track progress.
+   - Interactive Task Board to monitor task statuses (Pending, In Progress, Completed).
+4. **Clients Management:**
+   - A dedicated database for company clients, commercial registration numbers, and contact files.
+5. **Reporting & Analytics:**
+   - A smart Dashboard displaying an overview of the company's performance.
+   - Professional export of task and attendance reports.
+6. **System Logs:**
+   - Full tracking of all actions performed on the system to ensure security and transparency.
 
 ---
 
-## 🛠️ التقنيات المستخدمة (Tech Stack)
+## 🛠️ Tech Stack
 
-### Backend (الخادم)
+### Backend
 - **Framework:** Laravel (PHP)
 - **Database:** MySQL
 - **Authentication:** Laravel Sanctum (Token-based Auth)
 
-### Frontend (الواجهة الأمامية)
+### Frontend
 - **Library:** React.js (18+)
 - **Styling:** Tailwind CSS
 - **Routing:** React Router DOM
@@ -46,66 +46,66 @@
 
 ---
 
-## 🚀 كيفية تشغيل المشروع محلياً (Local Setup)
+## 🚀 Local Setup
 
-### 1. المتطلبات الأساسية
-- تثبيت PHP (8.1 أو أحدث)
-- تثبيت Composer
-- تثبيت Node.js & npm
-- تثبيت MySQL Database
+### 1. Prerequisites
+- Install PHP (8.1 or newer)
+- Install Composer
+- Install Node.js & npm
+- Install MySQL Database
 
-### 2. خطوات التثبيت
+### 2. Installation Steps
 ```bash
-# 1. نسخ المستودع
+# 1. Clone the repository
 git clone https://github.com/figo05-ai/Skill-Up-PHP.git
 cd Skill-Up-PHP
 
-# 2. تثبيت حزم الخادم
+# 2. Install backend dependencies
 composer install
 
-# 3. تثبيت حزم الواجهة الأمامية
+# 3. Install frontend dependencies
 npm install
 
-# 4. إعداد ملف البيئة
+# 4. Setup environment file
 cp .env.example .env
-# قم بتعديل بيانات قاعدة البيانات في ملف .env
+# Update the database credentials in the .env file
 
-# 5. تجهيز النظام
+# 5. Prepare the system
 php artisan key:generate
 php artisan migrate
 php artisan storage:link
 
-# 6. تشغيل الخادم
+# 6. Run the server
 php artisan serve
 
-# 7. تشغيل الواجهة الأمامية في نافذة Terminal أخرى
+# 7. Run the frontend in a separate Terminal window
 npm run dev
 ```
 
 ---
 
-## 🌍 رفع المشروع على الاستضافة (Deployment)
+## 🌍 Deployment
 
-1. اسحب المشروع على الاستضافة الخاصة بك (مثل Hostinger).
-2. قم بتحديث ملف الـ `.env` بإعدادات الإنتاج:
+1. Pull the project onto your hosting server (e.g., Hostinger).
+2. Update the `.env` file with production settings:
    ```env
    APP_ENV=production
    APP_DEBUG=false
    APP_URL=https://yourdomain.com
    ```
-3. قم بتشغيل الأوامر التالية من خلال الـ SSH:
+3. Run the following commands via SSH:
    ```bash
    composer install --optimize-autoloader --no-dev
    npm run build
    php artisan storage:link
    php artisan optimize
    ```
-4. تأكد من ضبط مسار الدومين (Document Root) إلى المجلد `public`.
+4. Ensure the domain's Document Root is pointed to the `public` directory.
 
 ---
 
-## 🔐 حسابات الإدارة الافتراضية
-يرجى الرجوع لمسؤول النظام للحصول على بيانات الاعتماد الخاصة بمدير النظام (Admin Credentials).
+## 🔐 Default Admin Accounts
+Please refer to the system administrator to obtain the Admin Credentials.
 
 ---
-*تم التطوير بكل ❤️ لصالح مؤسسة Skill-Up.*
+*Developed with ❤️ for the Skill-Up organization.*
